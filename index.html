@@ -1,1 +1,2160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>عثور | Finding</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Tahoma,sans-serif;
+    background:#07111d;
+    color:#ffffff;
+    min-height:100vh;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at 50% 0%,#173957 0,#07111d 48%,#03080d 100%);
+    z-index:-2;
+}
+
+.app{
+    max-width:760px;
+    margin:auto;
+    padding:15px;
+}
+
+/* رأس التطبيق */
+
+.top{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px 5px 22px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+    linear-gradient(145deg,#d9b45b,#92702e);
+
+    color:#07111d;
+    font-size:28px;
+    font-weight:bold;
+
+    box-shadow:
+    0 0 30px rgba(217,180,91,.25);
+}
+
+.brand h1{
+    margin:0;
+    font-size:27px;
+}
+
+.brand p{
+    margin:5px 0 0;
+    color:#9db0c3;
+    font-size:12px;
+}
+
+/* البطاقات */
+
+.card{
+    background:
+    linear-gradient(145deg,
+    rgba(16,34,53,.97),
+    rgba(7,19,31,.97));
+
+    border:1px solid #23405a;
+    border-radius:20px;
+
+    padding:20px;
+
+    margin-bottom:15px;
+
+    box-shadow:
+    0 15px 45px rgba(0,0,0,.35);
+}
+
+/* الترحيب */
+
+.hero{
+    text-align:center;
+    padding:30px 20px;
+}
+
+.hero h2{
+    margin:0 0 10px;
+    font-size:32px;
+}
+
+.hero p{
+    margin:0;
+    color:#9db0c3;
+}
+
+/* القائمة */
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+button{
+    font-family:inherit;
+}
+
+.btn{
+    border:0;
+    border-radius:15px;
+    padding:16px 12px;
+
+    background:#112438;
+    color:#ffffff;
+
+    font-size:16px;
+    font-weight:bold;
+
+    border:1px solid #23405a;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn:active{
+    transform:scale(.98);
+}
+
+.primary{
+    background:
+    linear-gradient(135deg,#167fc9,#2ea3ff);
+
+    border:0;
+}
+
+.gold{
+    background:
+    linear-gradient(135deg,#8d6825,#d9b45b);
+
+    color:#101820;
+    border:0;
+}
+
+.danger{
+    background:#7e2028;
+}
+
+.wide{
+    width:100%;
+    margin-top:12px;
+}
+
+.back{
+    background:#172a3c;
+    margin-bottom:15px;
+    padding:11px 15px;
+}
+
+/* الصفحات */
+
+.page{
+    display:block;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* الحقول */
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+label{
+    display:block;
+    color:#b9c9d8;
+    font-size:13px;
+    margin:10px 0 5px;
+}
+
+input{
+    width:100%;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    border:1px solid #23405a;
+
+    background:#081522;
+
+    color:white;
+
+    font-size:15px;
+
+    outline:none;
+}
+
+input:focus{
+    border-color:#2ea3ff;
+
+    box-shadow:
+    0 0 0 2px rgba(46,163,255,.1);
+}
+
+::placeholder{
+    color:#71869b;
+}
+
+/* الرسائل */
+
+.msg{
+    margin-top:12px;
+    padding:12px;
+
+    border-radius:10px;
+
+    background:#102438;
+
+    font-size:14px;
+}
+
+.ok{
+    color:#7fe3a1;
+}
+
+.err{
+    color:#ff9c9c;
+}
+
+.muted{
+    color:#9db0c3;
+    font-size:13px;
+    line-height:1.7;
+}
+
+/* النتائج */
+
+.result{
+    border:1px solid #23405a;
+
+    border-radius:14px;
+
+    padding:15px;
+
+    margin-top:10px;
+
+    background:#0a1826;
+
+    line-height:1.9;
+}
+
+.result strong{
+    color:#7ccaff;
+    font-size:17px;
+}
+
+.actions{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+}
+
+.actions .btn{
+    flex:1;
+    padding:10px;
+    font-size:13px;
+}
+
+/* الفوتر */
+
+.footer{
+    text-align:center;
+    color:#71869b;
+    font-size:11px;
+    padding:18px;
+}
+
+/* الهاتف */
+
+@media(max-width:520px){
+
+    .row{
+        grid-template-columns:1fr;
+    }
+
+    .grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .hero h2{
+        font-size:27px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+<!-- الرأس -->
+
+<header class="top">
+
+<div class="brand">
+
+<div class="logo">
+ع
+</div>
+
+<div>
+
+<h1>
+عثور <span style="color:#d9b45b">Finding</span>
+</h1>
+
+<p>
+نظام العثور على المركبات والهواتف
+</p>
+
+</div>
+
+</div>
+
+</header>
+
+
+<!-- الرئيسية -->
+
+<section id="home" class="page">
+
+<div class="card hero">
+
+<h2>
+🇸🇩 عثور
+</h2>
+
+<p>
+ابحث عن المركبات والهواتف بسرعة وسهولة
+</p>
+
+</div>
+
+
+<div class="grid">
+
+<button
+class="btn primary"
+onclick="openPage('search')">
+
+🔎
+<br>
+البحث
+
+</button>
+
+
+<button
+class="btn"
+onclick="openPage('cars')">
+
+🚗
+<br>
+المركبات
+
+</button>
+
+
+<button
+class="btn"
+onclick="openPage('phones')">
+
+📱
+<br>
+الهواتف
+
+</button>
+
+
+<button
+class="btn"
+onclick="openPage('backup')">
+
+💾
+<br>
+النسخ الاحتياطي
+
+</button>
+
+</div>
+
+
+<div class="card">
+
+<button
+class="btn gold wide"
+onclick="openPage('login')">
+
+🔐
+تسجيل الدخول وإدارة البيانات
+
+</button>
+
+</div>
+
+</section>
+
+
+
+<!-- تسجيل الدخول -->
+
+<section
+id="login"
+class="page hidden">
+
+<div class="card">
+
+<button
+class="btn back"
+onclick="openPage('home')">
+
+↩ العودة
+
+</button>
+
+
+<h2>
+🔐 تسجيل الدخول
+</h2>
+
+
+<label>
+البريد الإلكتروني
+</label>
+
+<input
+id="email"
+type="email"
+autocomplete="username"
+placeholder="البريد الإلكتروني">
+
+
+<label>
+كلمة مرور الحساب
+</label>
+
+<input
+id="authpass"
+type="password"
+autocomplete="current-password"
+placeholder="كلمة مرور الحساب">
+
+
+<button
+class="btn primary wide"
+onclick="login()">
+
+دخول
+
+</button>
+
+
+<div
+id="loginMsg"
+class="msg hidden">
+</div>
+
+
+<p class="muted">
+
+البحث متاح للجميع.
+أما إضافة البيانات وتعديلها وحذفها فتحتاج إلى تسجيل الدخول.
+
+</p>
+
+</div>
+
+</section>
+
+
+
+<!-- المركبات -->
+
+<section
+id="cars"
+class="page hidden">
+
+<div class="card">
+
+<button
+class="btn back"
+onclick="openPage('home')">
+
+↩ الرئيسية
+
+</button>
+
+
+<h2>
+🚗 نظام المركبات
+</h2>
+
+
+<div class="row">
+
+
+<div>
+
+<label>
+اسم المركبة
+</label>
+
+<input
+id="vehicle_name"
+placeholder="مثال: تويوتا هايلوكس">
+
+</div>
+
+
+<div>
+
+<label>
+اسم صاحب المركبة
+</label>
+
+<input
+id="car_owner_name"
+placeholder="اسم المالك">
+
+</div>
+
+
+<div>
+
+<label>
+رقم الهاتف الأول
+</label>
+
+<input
+id="car_phone1"
+inputmode="tel">
+
+</div>
+
+
+<div>
+
+<label>
+رقم الهاتف الثاني
+</label>
+
+<input
+id="car_phone2"
+inputmode="tel">
+
+</div>
+
+
+<div>
+
+<label>
+رقم اللوحة
+</label>
+
+<input
+id="plate_number">
+
+</div>
+
+
+<div>
+
+<label>
+رقم الشاسيه
+</label>
+
+<input
+id="chassis_number">
+
+</div>
+
+
+<div>
+
+<label>
+رقم الماكينة
+</label>
+
+<input
+id="engine_number">
+
+</div>
+
+
+</div>
+
+
+<button
+class="btn primary wide"
+onclick="saveCar()">
+
+حفظ بيانات المركبة
+
+</button>
+
+
+<div
+id="carMsg"
+class="msg hidden">
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- الهواتف -->
+
+<section
+id="phones"
+class="page hidden">
+
+<div class="card">
+
+<button
+class="btn back"
+onclick="openPage('home')">
+
+↩ الرئيسية
+
+</button>
+
+
+<h2>
+📱 نظام الهواتف
+</h2>
+
+
+<div class="row">
+
+
+<div>
+
+<label>
+نوع الهاتف
+</label>
+
+<input
+id="phone_type"
+placeholder="مثال: Samsung">
+
+</div>
+
+
+<div>
+
+<label>
+اسم صاحب الهاتف
+</label>
+
+<input
+id="phone_owner_name">
+
+</div>
+
+
+<div>
+
+<label>
+الرقم التسلسلي الأول
+</label>
+
+<input
+id="serial1">
+
+</div>
+
+
+<div>
+
+<label>
+الرقم التسلسلي الثاني
+</label>
+
+<input
+id="serial2">
+
+</div>
+
+
+<div>
+
+<label>
+رقم الهاتف الأول للتواصل
+</label>
+
+<input
+id="contact1"
+inputmode="tel">
+
+</div>
+
+
+<div>
+
+<label>
+رقم الهاتف الثاني للتواصل
+</label>
+
+<input
+id="contact2"
+inputmode="tel">
+
+</div>
+
+
+</div>
+
+
+<button
+class="btn primary wide"
+onclick="savePhone()">
+
+حفظ بيانات الهاتف
+
+</button>
+
+
+<div
+id="phoneMsg"
+class="msg hidden">
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- البحث -->
+
+<section
+id="search"
+class="page hidden">
+
+<div class="card">
+
+<button
+class="btn back"
+onclick="openPage('home')">
+
+↩ الرئيسية
+
+</button>
+
+
+<h2>
+🔎 البحث الشامل
+</h2>
+
+
+<p class="muted">
+
+يمكنك البحث باسم المركبة أو صاحبها أو الهاتف
+أو رقم اللوحة أو الشاسيه أو الماكينة
+أو نوع الهاتف أو الرقم التسلسلي.
+
+</p>
+
+
+<input
+id="query"
+placeholder="اكتب أي معلومة للبحث">
+
+
+<button
+class="btn primary wide"
+onclick="searchAll()">
+
+🔎 بحث
+
+</button>
+
+
+<div
+id="results">
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- النسخ الاحتياطي -->
+
+<section
+id="backup"
+class="page hidden">
+
+<div class="card">
+
+<button
+class="btn back"
+onclick="openPage('home')">
+
+↩ الرئيسية
+
+</button>
+
+
+<h2>
+💾 النسخ الاحتياطي
+</h2>
+
+
+<p class="muted">
+
+تصدير واستيراد البيانات يتطلب تسجيل الدخول
+وكلمة المرور الخاصة بالعمليات الحساسة.
+
+</p>
+
+
+<button
+class="btn gold wide"
+onclick="exportBackup()">
+
+📤 تصدير كل البيانات
+
+</button>
+
+
+<button
+class="btn wide"
+onclick="document.getElementById('backupFile').click()">
+
+📥 استيراد نسخة احتياطية
+
+</button>
+
+
+<input
+id="backupFile"
+class="hidden"
+type="file"
+accept=".json"
+onchange="importBackup(event)">
+
+
+<div
+id="backupMsg"
+class="msg hidden">
+</div>
+
+</div>
+
+</section>
+
+
+<div class="footer">
+
+Finding • عثور 🇸🇩
+
+</div>
+
+</div>
+
+
+
+<script>
+
+/* =========================
+   اتصال Supabase
+========================= */
+
+const SUPABASE_URL =
+"https://arnytlxotpuvstqzknzl.supabase.co";
+
+
+const SUPABASE_KEY =
+"sb_publishable_dQqJVKXIG_bZlakc9LtKnw_78E5Jjhz";
+
+
+const db =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+/* =========================
+   متغير المستخدم
+========================= */
+
+let currentUser = null;
+
+
+/* =========================
+   التنقل
+========================= */
+
+function openPage(id){
+
+    document
+    .querySelectorAll(".page")
+    .forEach(page=>{
+        page.classList.add("hidden");
+    });
+
+
+    document
+    .getElementById(id)
+    .classList.remove("hidden");
+
+
+    window.scrollTo(0,0);
+
+}
+
+
+
+/* =========================
+   الرسائل
+========================= */
+
+function showMessage(
+id,
+text,
+success=false
+){
+
+    const element =
+    document.getElementById(id);
+
+
+    element.classList.remove("hidden");
+
+
+    element.innerHTML =
+    '<span class="' +
+    (success ? "ok" : "err") +
+    '">' +
+    escapeHTML(text) +
+    "</span>";
+
+}
+
+
+/* =========================
+   حماية عرض النص
+========================= */
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+    .replace(/[&<>"']/g,function(char){
+
+        return {
+
+            "&":"&amp;",
+            "<":"&lt;",
+            ">":"&gt;",
+            '"':"&quot;",
+            "'":"&#039;"
+
+        }[char];
+
+    });
+
+}
+
+
+
+/* =========================
+   الحصول على قيمة
+========================= */
+
+function value(id){
+
+    return document
+    .getElementById(id)
+    .value
+    .trim();
+
+}
+
+
+/* =========================
+   مسح الحقول
+========================= */
+
+function clearFields(ids){
+
+    ids.forEach(id=>{
+
+        document
+        .getElementById(id)
+        .value="";
+
+    });
+
+}
+
+
+
+/* =========================
+   تسجيل الدخول
+========================= */
+
+async function login(){
+
+    const email =
+    value("email");
+
+
+    const password =
+    document
+    .getElementById("authpass")
+    .value;
+
+
+    if(!email || !password){
+
+        showMessage(
+            "loginMsg",
+            "أدخل البريد الإلكتروني وكلمة المرور."
+        );
+
+        return;
+
+    }
+
+
+    const {data,error} =
+    await db.auth.signInWithPassword({
+
+        email:email,
+
+        password:password
+
+    });
+
+
+    if(error){
+
+        showMessage(
+            "loginMsg",
+            "تعذر تسجيل الدخول."
+        );
+
+        console.log(error);
+
+        return;
+
+    }
+
+
+    currentUser =
+    data.user;
+
+
+    showMessage(
+        "loginMsg",
+        "تم تسجيل الدخول بنجاح.",
+        true
+    );
+
+
+    setTimeout(()=>{
+
+        openPage("home");
+
+    },700);
+
+}
+
+
+
+/* =========================
+   المستخدم الحالي
+========================= */
+
+async function getCurrentUser(){
+
+    const {data} =
+    await db.auth.getUser();
+
+
+    currentUser =
+    data.user || null;
+
+}
+
+
+getCurrentUser();
+
+
+
+/* =========================
+   التأكد من الدخول
+========================= */
+
+function requireLogin(){
+
+    if(!currentUser){
+
+        alert(
+            "هذه العملية تحتاج إلى تسجيل الدخول."
+        );
+
+        openPage("login");
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+
+/* =========================
+   إضافة مركبة
+========================= */
+
+async function saveCar(){
+
+    if(!requireLogin()) return;
+
+
+    const row={
+
+        vehicle_name:value("vehicle_name"),
+
+        owner_name:value("car_owner_name"),
+
+        phone1:value("car_phone1"),
+
+        phone2:value("car_phone2"),
+
+        plate_number:value("plate_number"),
+
+        chassis_number:value("chassis_number"),
+
+        engine_number:value("engine_number"),
+
+        owner_id:currentUser.id
+
+    };
+
+
+    if(
+
+        !row.vehicle_name ||
+        !row.owner_name ||
+        !row.phone1 ||
+        !row.plate_number ||
+        !row.chassis_number ||
+        !row.engine_number
+
+    ){
+
+        showMessage(
+            "carMsg",
+            "يرجى إدخال البيانات المطلوبة."
+        );
+
+        return;
+
+    }
+
+
+    const {error} =
+    await db
+    .from("cars")
+    .insert(row);
+
+
+    if(error){
+
+        showMessage(
+            "carMsg",
+            "حدث خطأ أثناء حفظ المركبة."
+        );
+
+        console.log(error);
+
+        return;
+
+    }
+
+
+    showMessage(
+        "carMsg",
+        "تم حفظ بيانات المركبة بنجاح.",
+        true
+    );
+
+
+    clearFields([
+
+        "vehicle_name",
+        "car_owner_name",
+        "car_phone1",
+        "car_phone2",
+        "plate_number",
+        "chassis_number",
+        "engine_number"
+
+    ]);
+
+}
+
+
+
+/* =========================
+   إضافة هاتف
+========================= */
+
+async function savePhone(){
+
+    if(!requireLogin()) return;
+
+
+    const row={
+
+        phone_type:value("phone_type"),
+
+        owner_name:value("phone_owner_name"),
+
+        serial1:value("serial1"),
+
+        serial2:value("serial2"),
+
+        contact1:value("contact1"),
+
+        contact2:value("contact2"),
+
+        owner_id:currentUser.id
+
+    };
+
+
+    if(
+
+        !row.phone_type ||
+        !row.owner_name ||
+        !row.serial1 ||
+        !row.contact1
+
+    ){
+
+        showMessage(
+            "phoneMsg",
+            "يرجى إدخال البيانات المطلوبة."
+        );
+
+        return;
+
+    }
+
+
+    const {error} =
+    await db
+    .from("phones")
+    .insert(row);
+
+
+    if(error){
+
+        showMessage(
+            "phoneMsg",
+            "حدث خطأ أثناء حفظ الهاتف."
+        );
+
+        console.log(error);
+
+        return;
+
+    }
+
+
+    showMessage(
+        "phoneMsg",
+        "تم حفظ بيانات الهاتف بنجاح.",
+        true
+    );
+
+
+    clearFields([
+
+        "phone_type",
+        "phone_owner_name",
+        "serial1",
+        "serial2",
+        "contact1",
+        "contact2"
+
+    ]);
+
+}
+
+
+
+/* =========================
+   البحث
+========================= */
+
+async function searchAll(){
+
+    const query =
+    value("query");
+
+
+    const result =
+    document.getElementById("results");
+
+
+    if(!query){
+
+        result.innerHTML =
+        '<div class="msg">' +
+        '<span class="err">' +
+        'اكتب معلومة للبحث.' +
+        '</span>' +
+        '</div>';
+
+        return;
+
+    }
+
+
+    result.innerHTML =
+    '<div class="msg">' +
+    'جاري البحث...' +
+    '</div>';
+
+
+    const pattern =
+    "%" +
+    query
+    .replace(/[%_]/g,"\\$&") +
+    "%";
+
+
+    const cars =
+    await db
+    .from("cars")
+    .select("*")
+    .or(
+        "vehicle_name.ilike."+pattern+
+        ",owner_name.ilike."+pattern+
+        ",phone1.ilike."+pattern+
+        ",phone2.ilike."+pattern+
+        ",plate_number.ilike."+pattern+
+        ",chassis_number.ilike."+pattern+
+        ",engine_number.ilike."+pattern
+    );
+
+
+    const phones =
+    await db
+    .from("phones")
+    .select("*")
+    .or(
+        "phone_type.ilike."+pattern+
+        ",owner_name.ilike."+pattern+
+        ",serial1.ilike."+pattern+
+        ",serial2.ilike."+pattern+
+        ",contact1.ilike."+pattern+
+        ",contact2.ilike."+pattern
+    );
+
+
+    if(cars.error || phones.error){
+
+        result.innerHTML =
+        '<div class="msg">' +
+        '<span class="err">' +
+        'حدث خطأ أثناء البحث.' +
+        '</span>' +
+        '</div>';
+
+        console.log(
+            cars.error,
+            phones.error
+        );
+
+        return;
+
+    }
+
+
+    let html="";
+
+
+    /* نتائج المركبات */
+
+    (cars.data || [])
+    .forEach(car=>{
+
+        html += `
+
+        <div class="result">
+
+        <strong>
+        🚗 تم العثور على مركبة
+        </strong>
+
+        <br>
+
+        المركبة:
+        ${escapeHTML(car.vehicle_name)}
+
+        <br>
+
+        المالك:
+        ${escapeHTML(car.owner_name)}
+
+        <br>
+
+        رقم اللوحة:
+        ${escapeHTML(car.plate_number)}
+
+        <br>
+
+        رقم الشاسيه:
+        ${escapeHTML(car.chassis_number)}
+
+        <br>
+
+        رقم الماكينة:
+        ${escapeHTML(car.engine_number)}
+
+        <br>
+
+        للتواصل:
+        ${escapeHTML(car.phone1)}
+
+        ${
+            car.phone2
+            ? " / "+escapeHTML(car.phone2)
+            : ""
+        }
+
+        ${ownerButtons("cars",car)}
+
+        </div>
+
+        `;
+
+    });
+
+
+
+    /* نتائج الهواتف */
+
+    (phones.data || [])
+    .forEach(phone=>{
+
+        html += `
+
+        <div class="result">
+
+        <strong>
+        📱 تم العثور على هاتف
+        </strong>
+
+        <br>
+
+        نوع الهاتف:
+        ${escapeHTML(phone.phone_type)}
+
+        <br>
+
+        المالك:
+        ${escapeHTML(phone.owner_name)}
+
+        <br>
+
+        الرقم التسلسلي الأول:
+        ${escapeHTML(phone.serial1)}
+
+        <br>
+
+        الرقم التسلسلي الثاني:
+        ${escapeHTML(phone.serial2)}
+
+        <br>
+
+        للتواصل:
+        ${escapeHTML(phone.contact1)}
+
+        ${
+            phone.contact2
+            ? " / "+escapeHTML(phone.contact2)
+            : ""
+        }
+
+        ${ownerButtons("phones",phone)}
+
+        </div>
+
+        `;
+
+    });
+
+
+    if(!html){
+
+        html =
+        '<div class="msg">' +
+        '<span class="err">' +
+        'لم يتم العثور على بيانات مطابقة.' +
+        '</span>' +
+        '</div>';
+
+    }
+
+
+    result.innerHTML=html;
+
+}
+
+
+
+/* =========================
+   أزرار المالك فقط
+========================= */
+
+function ownerButtons(
+table,
+record
+){
+
+    if(
+
+        !currentUser ||
+        currentUser.id !== record.owner_id
+
+    ){
+
+        return "";
+
+    }
+
+
+    return `
+
+    <div class="actions">
+
+    <button
+    class="btn"
+    onclick="editRecord('${table}','${record.id}')">
+
+    ✏️ تعديل
+
+    </button>
+
+
+    <button
+    class="btn danger"
+    onclick="deleteRecord('${table}','${record.id}')">
+
+    🗑️ حذف
+
+    </button>
+
+    </div>
+
+    `;
+
+}
+
+
+
+/* =========================
+   كلمة مرور العمليات
+========================= */
+
+async function verifyActionPassword(){
+
+    const password =
+    prompt(
+        "أدخل كلمة السر لإتمام العملية:"
+    );
+
+
+    if(password === null){
+
+        return false;
+
+    }
+
+
+    return password ===
+    "professional##";
+
+}
+
+
+
+/* =========================
+   حذف
+========================= */
+
+async function deleteRecord(
+table,
+id
+){
+
+    if(!requireLogin()) return;
+
+
+    if(
+        !(await verifyActionPassword())
+    ){
+
+        alert(
+            "كلمة السر غير صحيحة."
+        );
+
+        return;
+
+    }
+
+
+    const {data,error} =
+    await db
+    .from(table)
+    .delete()
+    .eq("id",id)
+    .eq("owner_id",currentUser.id)
+    .select();
+
+
+    if(error || !data || !data.length){
+
+        alert(
+            "تعذر حذف السجل."
+        );
+
+        console.log(error);
+
+        return;
+
+    }
+
+
+    alert(
+        "تم حذف السجل بنجاح."
+    );
+
+
+    searchAll();
+
+}
+
+
+
+/* =========================
+   تعديل
+========================= */
+
+async function editRecord(
+table,
+id
+){
+
+    if(!requireLogin()) return;
+
+
+    if(
+        !(await verifyActionPassword())
+    ){
+
+        alert(
+            "كلمة السر غير صحيحة."
+        );
+
+        return;
+
+    }
+
+
+    const {data,error} =
+    await db
+    .from(table)
+    .select("*")
+    .eq("id",id)
+    .eq("owner_id",currentUser.id)
+    .single();
+
+
+    if(error){
+
+        alert(
+            "تعذر تحميل السجل."
+        );
+
+        return;
+
+    }
+
+
+    let fields;
+
+
+    if(table==="cars"){
+
+        fields=[
+
+            ["vehicle_name","اسم المركبة"],
+
+            ["owner_name","اسم المالك"],
+
+            ["phone1","رقم الهاتف الأول"],
+
+            ["phone2","رقم الهاتف الثاني"],
+
+            ["plate_number","رقم اللوحة"],
+
+            ["chassis_number","رقم الشاسيه"],
+
+            ["engine_number","رقم الماكينة"]
+
+        ];
+
+    }
+
+    else{
+
+        fields=[
+
+            ["phone_type","نوع الهاتف"],
+
+            ["owner_name","اسم المالك"],
+
+            ["serial1","الرقم التسلسلي الأول"],
+
+            ["serial2","الرقم التسلسلي الثاني"],
+
+            ["contact1","رقم الهاتف الأول"],
+
+            ["contact2","رقم الهاتف الثاني"]
+
+        ];
+
+    }
+
+
+    const updates={};
+
+
+    for(
+        const field of fields
+    ){
+
+        const value =
+        prompt(
+            field[1],
+            data[field[0]] || ""
+        );
+
+
+        if(value === null){
+
+            return;
+
+        }
+
+
+        updates[field[0]] =
+        value.trim();
+
+    }
+
+
+    const {error:updateError} =
+    await db
+    .from(table)
+    .update(updates)
+    .eq("id",id)
+    .eq("owner_id",currentUser.id);
+
+
+    if(updateError){
+
+        alert(
+            "تعذر تعديل السجل."
+        );
+
+        return;
+
+    }
+
+
+    alert(
+        "تم تعديل السجل بنجاح."
+    );
+
+
+    searchAll();
+
+}
+
+
+
+/* =========================
+   تصدير النسخة الاحتياطية
+========================= */
+
+async function exportBackup(){
+
+    if(!requireLogin()) return;
+
+
+    if(
+        !(await verifyActionPassword())
+    ){
+
+        alert(
+            "كلمة السر غير صحيحة."
+        );
+
+        return;
+
+    }
+
+
+    const cars =
+    await db
+    .from("cars")
+    .select("*")
+    .eq("owner_id",currentUser.id);
+
+
+    const phones =
+    await db
+    .from("phones")
+    .select("*")
+    .eq("owner_id",currentUser.id);
+
+
+    if(cars.error || phones.error){
+
+        showMessage(
+            "backupMsg",
+            "تعذر إنشاء النسخة الاحتياطية."
+        );
+
+        return;
+
+    }
+
+
+    const backup={
+
+        app:"Finding",
+
+        version:1,
+
+        created_at:
+        new Date().toISOString(),
+
+        cars:
+        cars.data || [],
+
+        phones:
+        phones.data || []
+
+    };
+
+
+    const blob =
+    new Blob(
+
+        [
+            JSON.stringify(
+                backup,
+                null,
+                2
+            )
+        ],
+
+        {
+            type:"application/json"
+        }
+
+    );
+
+
+    const url =
+    URL.createObjectURL(blob);
+
+
+    const link =
+    document.createElement("a");
+
+
+    link.href=url;
+
+    link.download=
+    "finding-backup.json";
+
+
+    document
+    .body
+    .appendChild(link);
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(url);
+
+
+    showMessage(
+        "backupMsg",
+        "تم تصدير النسخة الاحتياطية بنجاح.",
+        true
+    );
+
+}
+
+
+
+/* =========================
+   استيراد النسخة الاحتياطية
+========================= */
+
+async function importBackup(event){
+
+    if(!requireLogin()) return;
+
+
+    if(
+        !(await verifyActionPassword())
+    ){
+
+        alert(
+            "كلمة السر غير صحيحة."
+        );
+
+        event.target.value="";
+
+        return;
+
+    }
+
+
+    const file =
+    event.target.files[0];
+
+
+    if(!file){
+
+        return;
+
+    }
+
+
+    try{
+
+        const text =
+        await file.text();
+
+
+        const backup =
+        JSON.parse(text);
+
+
+        if(
+            !backup.cars &&
+            !backup.phones
+        ){
+
+            throw new Error(
+                "ملف غير صالح"
+            );
+
+        }
+
+
+        if(
+            backup.cars &&
+            backup.cars.length
+        ){
+
+            const rows =
+            backup.cars.map(item=>{
+
+                const row={...item};
+
+
+                delete row.id;
+
+                delete row.created_at;
+
+                delete row.updated_at;
+
+
+                row.owner_id=
+                currentUser.id;
+
+
+                return row;
+
+            });
+
+
+            const {error} =
+            await db
+            .from("cars")
+            .insert(rows);
+
+
+            if(error){
+
+                throw error;
+
+            }
+
+        }
+
+
+        if(
+            backup.phones &&
+            backup.phones.length
+        ){
+
+            const rows =
+            backup.phones.map(item=>{
+
+                const row={...item};
+
+
+                delete row.id;
+
+                delete row.created_at;
+
+                delete row.updated_at;
+
+
+                row.owner_id=
+                currentUser.id;
+
+
+                return row;
+
+            });
+
+
+            const {error} =
+            await db
+            .from("phones")
+            .insert(rows);
+
+
+            if(error){
+
+                throw error;
+
+            }
+
+        }
+
+
+        showMessage(
+            "backupMsg",
+            "تم استيراد النسخة الاحتياطية بنجاح.",
+            true
+        );
+
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+
+        showMessage(
+            "backupMsg",
+            "ملف النسخة الاحتياطية غير صالح أو لا يتوافق مع قاعدة البيانات."
+        );
+
+    }
+
+
+    event.target.value="";
+
+}
+
+
+
+/* =========================
+   مراقبة تسجيل الدخول
+========================= */
+
+db.auth.onAuthStateChange(
+
+    function(event,session){
+
+        currentUser =
+        session?.user || null;
+
+    }
+
+);
+
+</script>
+
+</body>
+</html>
